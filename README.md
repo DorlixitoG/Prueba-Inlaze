@@ -1,252 +1,265 @@
-# Task Management System - Microservices Architecture (Sin Docker)
+# 🧩 Sistema de Gestión - Arquitectura de Microservicios
 
-Sistema completo de gestión de tareas con arquitectura de microservicios, desarrollado con NestJS para el backend y Next.js para el frontend.
+Aplicación completa construida con una arquitectura basada en microservicios. Backend desarrollado en **NestJS**, frontend en **Next.js**, y base de datos en **MongoDB Atlas**.
+
+---
 
 ## 🏗️ Arquitectura
 
-### Microservicios Backend (NestJS)
-- **Auth Service** (Puerto 3001): Autenticación y autorización
-- **Projects Service** (Puerto 3002): Gestión de proyectos  
-- **Tasks Service** (Puerto 3003): Gestión de tareas
-- **Comments Service** (Puerto 3004): Sistema de comentarios
-- **API Gateway** (Puerto 4000): Punto de entrada único que centraliza todas las comunicaciones
+### 🔧 Microservicios Backend (NestJS)
+| Servicio           | Puerto | Descripción                   |
+|--------------------|--------|-------------------------------|
+| Auth Service       | 3001   | Autenticación y autorización |
+| Projects Service   | 3002   | Gestión de proyectos         |
+| Tasks Service      | 3003   | Gestión de tareas            |
+| Comments Service   | 3004   | Comentarios en tareas        |
+| API Gateway        | 4000   | Punto único de entrada       |
 
-### Frontend (Next.js)
-- **Frontend App** (Puerto 3000): Interfaz de usuario que se comunica únicamente con el API Gateway
+### 💻 Frontend (Next.js)
+- **Puerto 3000**  
+- Interfaz que se comunica únicamente con el API Gateway.
 
-### Base de Datos
-- **MongoDB Atlas**: Base de datos en la nube compartida por todos los microservicios
+### 🗄️ Base de Datos
+- **MongoDB Atlas** (compartida por todos los servicios)
+
+---
 
 ## 🚀 Instalación y Configuración
 
-### Prerrequisitos
+### 🔹 Prerrequisitos
+
 - Node.js 18+
 - npm o yarn
-- Cuenta en MongoDB Atlas
+- Cuenta gratuita en [MongoDB Atlas](https://www.mongodb.com/atlas)
 
-### 1. Configuración de MongoDB Atlas
+---
 
-1. Crea una cuenta en [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Crea un nuevo cluster gratuito
-3. Configura un usuario de base de datos
-4. Obtén la cadena de conexión
-5. Agrega tu IP a la lista blanca (0.0.0.0/0 para desarrollo)
+### 1️⃣ Configuración de MongoDB Atlas
 
-### 2. Configuración de Variables de Entorno
+1. Crea una cuenta
+2. Crea un cluster gratuito
+3. Crea un usuario con acceso a la base
+4. Obtén la URI de conexión
+5. Añade tu IP en la whitelist (`0.0.0.0/0` para desarrollo)
 
-Crea un archivo `.env` en cada servicio con la siguiente configuración:
+---
 
-**auth-service/.env**
-\`\`\`env
+### 2️⃣ Variables de Entorno
+
+Crea un archivo `.env` en cada servicio con la siguiente estructura:
+
+#### 📁 `auth-service/.env`
+```env
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
 JWT_SECRET=your-super-secret-jwt-key
 PORT=3001
-\`\`\`
+```
 
-**projects-service/.env**
-\`\`\`env
+#### 📁 `projects-service/.env`
+```env
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
 PORT=3002
-\`\`\`
+```
 
-**tasks-service/.env**
-\`\`\`env
+#### 📁 `tasks-service/.env`
+```env
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
 PORT=3003
-\`\`\`
+```
 
-**comments-service/.env**
-\`\`\`env
+#### 📁 `comments-service/.env`
+```env
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
 PORT=3004
-\`\`\`
+```
 
-**api-gateway/.env**
-\`\`\`env
+#### 📁 `api-gateway/.env`
+```env
 AUTH_SERVICE_URL=http://localhost:3001
 PROJECTS_SERVICE_URL=http://localhost:3002
 TASKS_SERVICE_URL=http://localhost:3003
 COMMENTS_SERVICE_URL=http://localhost:3004
 PORT=4000
-\`\`\`
+```
 
-**frontend/.env.local**
-\`\`\`env
+#### 📁 `frontend/.env.local`
+```env
 NEXT_PUBLIC_API_URL=http://localhost:4000
-\`\`\`
+```
 
-### 3. Instalación de Dependencias
+---
 
-Instala las dependencias en cada servicio:
+### 3️⃣ Instalación de Dependencias
 
-\`\`\`bash
-# Auth Service
-cd auth-service
-npm install
+Ejecuta lo siguiente en cada carpeta:
 
-# Projects Service  
-cd ../projects-service
-npm install
+```bash
+# Auth
+cd auth-service && npm install
 
-# Tasks Service
-cd ../tasks-service
-npm install
+# Projects
+cd ../projects-service && npm install
 
-# Comments Service
-cd ../comments-service
-npm install
+# Tasks
+cd ../tasks-service && npm install
+
+# Comments
+cd ../comments-service && npm install
 
 # API Gateway
-cd ../api-gateway
-npm install
+cd ../api-gateway && npm install
 
 # Frontend
-cd ../frontend
-npm install
-\`\`\`
+cd ../frontend && npm install
+```
 
-### 4. Ejecución de los Servicios
+---
 
-**IMPORTANTE**: Debes ejecutar los servicios en el siguiente orden y en terminales separadas:
+### 4️⃣ Ejecución de los Servicios
 
-**Terminal 1 - Auth Service:**
-\`\`\`bash
+Usa **terminales separadas** y sigue este orden:
+
+```bash
+# Terminal 1 - Auth
 cd auth-service
 npm run start:dev
-\`\`\`
 
-**Terminal 2 - Projects Service:**
-\`\`\`bash
-cd projects-service
+# Terminal 2 - Projects
+cd ../projects-service
 npm run start:dev
-\`\`\`
 
-**Terminal 3 - Tasks Service:**
-\`\`\`bash
-cd tasks-service
+# Terminal 3 - Tasks
+cd ../tasks-service
 npm run start:dev
-\`\`\`
 
-**Terminal 4 - Comments Service:**
-\`\`\`bash
-cd comments-service
+# Terminal 4 - Comments
+cd ../comments-service
 npm run start:dev
-\`\`\`
 
-**Terminal 5 - API Gateway:**
-\`\`\`bash
-cd api-gateway
+# Terminal 5 - API Gateway
+cd ../api-gateway
 npm run start:dev
-\`\`\`
 
-**Terminal 6 - Frontend:**
-\`\`\`bash
-cd frontend
+# Terminal 6 - Frontend
+cd ../frontend
 npm run dev
-\`\`\`
+```
 
-### 5. Verificación
+---
 
-Una vez que todos los servicios estén ejecutándose, verifica:
+### ✅ Verificación
 
-- Auth Service: http://localhost:3001
-- Projects Service: http://localhost:3002  
-- Tasks Service: http://localhost:3003
-- Comments Service: http://localhost:3004
-- API Gateway: http://localhost:4000
+- Auth: http://localhost:3001  
+- Projects: http://localhost:3002  
+- Tasks: http://localhost:3003  
+- Comments: http://localhost:3004  
+- Gateway: http://localhost:4000  
 - Frontend: http://localhost:3000
+
+---
 
 ## 📱 Uso de la Aplicación
 
-1. Abre tu navegador en `http://localhost:3000`
-2. Regístrate con un nuevo usuario o inicia sesión
-3. Comienza a crear proyectos y tareas
+1. Abre `http://localhost:3000`
+2. Regístrate o inicia sesión
+3. Crea proyectos, tareas y comentarios
 
-## 🔧 Flujo de Comunicación
+---
 
-\`\`\`
+## 🔄 Flujo de Comunicación
+
+```
 Frontend (3000) 
     ↓
 API Gateway (4000)
     ↓
-┌─────────────────────────────────────┐
-│  Auth Service (3001)                │
-│  Projects Service (3002)            │  
-│  Tasks Service (3003)               │
-│  Comments Service (3004)            │
-└─────────────────────────────────────┘
+┌───────────────────────────────┐
+│ Auth     (3001)               │
+│ Projects (3002)               │
+│ Tasks    (3003)               │
+│ Comments (3004)               │
+└───────────────────────────────┘
     ↓
 MongoDB Atlas
-\`\`\`
+```
 
-### Características del API Gateway
+---
 
-- **Autenticación centralizada**: Valida tokens JWT antes de reenviar requests
-- **Enrutamiento inteligente**: Dirige cada request al microservicio correcto
-- **Propagación de headers**: Envía información del usuario a cada microservicio
-- **Manejo de errores**: Centraliza el manejo de errores de todos los servicios
+### 🌉 Características del API Gateway
+
+- Validación JWT centralizada
+- Enrutamiento inteligente
+- Propagación de headers
+- Manejo global de errores
+
+---
 
 ## 🛠️ Tecnologías Utilizadas
 
 ### Backend
-- **NestJS**: Framework de Node.js para cada microservicio
-- **MongoDB Atlas**: Base de datos NoSQL en la nube
-- **Mongoose**: ODM para MongoDB
-- **JWT**: Autenticación basada en tokens
-- **Axios**: Cliente HTTP para comunicación entre servicios
+- NestJS
+- MongoDB Atlas + Mongoose
+- JWT
+- Axios
 
 ### Frontend
-- **Next.js 14**: Framework de React
-- **TypeScript**: Tipado estático
-- **Tailwind CSS**: Framework de CSS
-- **Radix UI**: Componentes de UI
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Radix UI
+
+---
 
 ## 🔒 Seguridad
 
-- **JWT Tokens**: Autenticación stateless
-- **Validación de entrada**: En todos los endpoints
-- **Autorización por roles**: Admin y Member
-- **Headers de usuario**: Propagación segura de información del usuario
+- Tokens JWT
+- Validaciones por DTOs
+- Roles: `admin`, `member`
+- Headers seguros entre servicios
 
-## 🚨 Solución de Problemas
+---
 
-### Error: Puerto en uso
-\`\`\`bash
-# Ver qué proceso usa el puerto
+## 🧪 Solución de Problemas
+
+### 🔸 Puerto en uso
+```bash
 lsof -i :3001
-# Matar el proceso
-kill -9 PID
-\`\`\`
+kill -9 <PID>
+```
 
-### Error: MongoDB Connection
-- Verifica la cadena de conexión en `.env`
-- Asegúrate de que tu IP esté en la whitelist
-- Verifica usuario y contraseña
+### 🔸 Error de conexión a MongoDB
+- Verifica `.env`
+- Asegura IP en whitelist
+- Revisa usuario/contraseña
 
-### Error: Cannot connect to service
-- Asegúrate de que todos los microservicios estén ejecutándose
-- Verifica que los puertos estén correctos
-- Revisa los logs de cada servicio
+### 🔸 No se conecta un servicio
+- Revisa que todos estén corriendo
+- Verifica puertos y logs
+
+---
 
 ## 📈 Funcionalidades Implementadas
 
-✅ **Gestión de Proyectos**: Crear, ver, editar, eliminar proyectos  
-✅ **Gestión de Tareas**: CRUD completo con estados y prioridades  
-✅ **Sistema de Comentarios**: Comentarios en tareas  
-✅ **Filtros y Búsqueda**: Por estado, responsable, palabras clave  
-✅ **Autenticación JWT**: Con roles (admin/member)  
-✅ **API Gateway**: Centralización de comunicaciones  
-✅ **UI Responsiva**: Diseño moderno con Tailwind CSS  
+- ✅ CRUD de proyectos y tareas
+- ✅ Sistema de comentarios por tarea
+- ✅ Filtros de búsqueda y estado
+- ✅ Autenticación JWT con roles
+- ✅ Comunicación centralizada vía API Gateway
+- ✅ UI responsiva y moderna
 
-## 🎯 Ventajas de esta Arquitectura
+---
 
-1. **Separación de responsabilidades**: Cada servicio maneja una funcionalidad específica
-2. **Escalabilidad independiente**: Cada microservicio puede escalarse por separado
-3. **Tecnologías heterogéneas**: Cada servicio puede usar diferentes tecnologías
-4. **Desarrollo en equipo**: Equipos pueden trabajar independientemente en cada servicio
-5. **Tolerancia a fallos**: Si un servicio falla, los otros siguen funcionando
-6. **API Gateway centralizado**: Punto único de entrada que simplifica el frontend
+## 🎯 Ventajas de la Arquitectura
 
-## 📞 Contacto
+1. Separación clara de responsabilidades
+2. Escalabilidad por servicio
+3. Uso de tecnologías variadas por microservicio
+4. Trabajo colaborativo por áreas
+5. Tolerancia a fallos
+6. Centralización del acceso con API Gateway
 
-Para dudas o soporte, contacta al desarrollador del proyecto.
+---
+
+## 📬 Contacto
+
+Para soporte o colaboración, contacta al desarrollador del proyecto.
