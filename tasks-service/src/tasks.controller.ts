@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Query, Headers, UnauthorizedException } from "@nestjs/common"
+import { Body,Controller, Get, Post, Put, Delete, Param, Query, Headers, UnauthorizedException } from "@nestjs/common"
 import  { TasksService } from "./tasks.service"
 import  { CreateTaskDto, UpdateTaskDto } from "./dto/task.dto"
 
@@ -15,9 +15,15 @@ export class TasksController {
   }
 
   @Post()
-  async create(createTaskDto: CreateTaskDto, @Headers() headers: any) {
-    const userId = this.extractUserIdFromHeaders(headers)
-    return this.tasksService.create({ ...createTaskDto, createdBy: userId })
+  async create(@Body() createTaskDto: CreateTaskDto, @Headers() headers: any) {
+    try {
+      const userId = this.extractUserIdFromHeaders(headers);
+      console.log("✅ Body recibido:", createTaskDto);
+      return await this.tasksService.create({ ...createTaskDto, createdBy: userId });
+    } catch (error) {
+      console.error(" Error creando tarea:", error);
+      throw error;
+    }
   }
 
   @Get("project/:projectId")
@@ -37,11 +43,16 @@ export class TasksController {
     return this.tasksService.findOne(id);
   }
 
-  @Put(":id")
-  async update(@Param('id') id: string, updateTaskDto: UpdateTaskDto, @Headers() headers: any) {
-    const userId = this.extractUserIdFromHeaders(headers)
-    return this.tasksService.update(id, updateTaskDto, userId)
-  }
+ @Put(":id")
+async update(
+  @Param('id') id: string,
+  @Body() updateTaskDto: UpdateTaskDto,
+  @Headers() headers: any,
+) {
+  const userId = this.extractUserIdFromHeaders(headers)
+  return this.tasksService.update(id, updateTaskDto, userId)
+}
+
 
   @Delete(":id")
   async remove(@Param('id') id: string, @Headers() headers: any) {

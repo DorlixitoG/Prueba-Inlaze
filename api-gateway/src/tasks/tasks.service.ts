@@ -5,24 +5,33 @@ import axios from "axios"
 export class TasksService {
   private readonly tasksServiceUrl = "http://localhost:3003"
   
-  async create(data: any, headers: any) {
-    try {
-      const response = await axios.post(`${this.tasksServiceUrl}/tasks`, data, {
-        headers: {
-          "x-user-id": headers["x-user-id"],
-          "x-user-email": headers["x-user-email"],
-          "x-user-name": headers["x-user-name"],
-          "x-user-role": headers["x-user-role"],
-        },
-      })
-      return response.data
-    } catch (error) {
-      throw new HttpException(
-        error.response?.data?.message || "Failed to create task",
-        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      )
+async create(data: any, headers: any) {
+  try {
+    const enrichedData = {
+      ...data,
+      createdBy: headers["x-user-id"],
     }
+
+    console.log("✅ Enviando tarea al microservicio con body:", enrichedData)
+
+    const response = await axios.post(`${this.tasksServiceUrl}/tasks`, enrichedData, {
+      headers: {
+        "x-user-id": headers["x-user-id"],
+        "x-user-email": headers["x-user-email"],
+        "x-user-name": headers["x-user-name"],
+        "x-user-role": headers["x-user-role"],
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error("❌ Error creando tarea:", error.response?.data || error.message)
+    throw new HttpException(
+      error.response?.data?.message || "Failed to create task",
+      error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+    )
   }
+}
+
 
   async findByProject(projectId: string, filters: any, headers: any) {
     try {

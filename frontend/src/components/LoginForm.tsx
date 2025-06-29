@@ -25,14 +25,14 @@ export function LoginForm() {
     setLoading(true)
 
     try {
-      console.log("🔍 Frontend - Attempting login with:", { email, password: "***" })
+      console.log(" Frontend - Attempting login with:", { email, password: "***" })
       await login(email, password)
       toast({
         title: "Success",
         description: "Logged in successfully",
       })
     } catch (error) {
-      console.error("❌ Frontend - Login error:", error)
+      console.error(" Frontend - Login error:", error)
       toast({
         title: "Error",
         description: "Invalid credentials",
@@ -48,14 +48,14 @@ export function LoginForm() {
     setLoading(true)
 
     try {
-      console.log("🔍 Frontend - Attempting register with:", { email, name, role, password: "***" })
+      console.log(" Frontend - Attempting register with:", { email, name, role, password: "***" })
       await register(email, password, name, role)
       toast({
         title: "Success",
         description: "Account created successfully",
       })
     } catch (error) {
-      console.error("❌ Frontend - Register error:", error)
+      console.error(" Frontend - Register error:", error)
       toast({
         title: "Error",
         description: "Registration failed",
@@ -70,14 +70,14 @@ export function LoginForm() {
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Task Management System</CardTitle>
-          <CardDescription>Sign in to your account or create a new one</CardDescription>
+          <CardTitle>Bienvenido a TareApp</CardTitle>
+          <CardDescription>Inicia sesión con tu cuenta o crea una nueva</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+              <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
+              <TabsTrigger value="register">Registrarse</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
@@ -91,13 +91,13 @@ export function LoginForm() {
                 />
                 <Input
                   type="password"
-                  placeholder="Password"
+                  placeholder="Contraseña"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign In"}
+                  {loading ? "Iniciando Sesión..." : "Inicia Sesión"}
                 </Button>
               </form>
             </TabsContent>
@@ -106,7 +106,7 @@ export function LoginForm() {
               <form onSubmit={handleRegister} className="space-y-4">
                 <Input
                   type="text"
-                  placeholder="Full Name"
+                  placeholder="Nombre de Usuario"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -120,25 +120,25 @@ export function LoginForm() {
                 />
                 <Input
                   type="password"
-                  placeholder="Password"
+                  placeholder="Contraseña"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
+                  <Label htmlFor="role">Rol</Label>
                   <Select value={role} onValueChange={setRole}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="member">Member</SelectItem>
+                      <SelectItem value="member">Miembro</SelectItem>
                       <SelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
+                  {loading ? "Creando la Cuenta..." : "Crear Cuenta"}
                 </Button>
               </form>
             </TabsContent>

@@ -60,18 +60,18 @@ export function Dashboard() {
             <div className="flex items-center space-x-4">
               <FolderOpen className="h-8 w-8 text-blue-600" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Task Management</h1>
-                <p className="text-sm text-gray-500">Welcome back, {user?.name}</p>
+                <h1 className="text-2xl font-bold text-gray-900">TareApp</h1>
+                <p className="text-sm text-gray-500">Bienvenido de nuevo, {user?.name}</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                New Project
+                Nuevo Proyecto
               </Button>
               <Button variant="outline" onClick={logout}>
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                Cerrar Sesión 
               </Button>
             </div>
           </div>
@@ -80,7 +80,7 @@ export function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Projects</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Tus Proyectos</h2>
           <ProjectList projects={projects} loading={loading} onRefresh={fetchProjects} />
         </div>
       </main>

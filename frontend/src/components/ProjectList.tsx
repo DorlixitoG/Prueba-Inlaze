@@ -35,9 +35,9 @@ export function ProjectList({ projects, loading, onRefresh }: ProjectListProps) 
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No projects yet</h3>
-            <p className="text-gray-500 mb-4">Create your first project to get started</p>
-            <Button onClick={onRefresh}>Refresh</Button>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Sin proyectos por ahora</h3>
+            <p className="text-gray-500 mb-4">Crea tu primer proyecto para empezar</p>
+            <Button onClick={onRefresh}>Recargar</Button>
           </div>
         </CardContent>
       </Card>

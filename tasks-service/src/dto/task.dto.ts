@@ -23,6 +23,10 @@ export class CreateTaskDto {
 
   @IsString()
   projectId: string
+
+  @IsOptional()
+  @IsString()
+  createdBy?: string
 }
 
 export class UpdateTaskDto {

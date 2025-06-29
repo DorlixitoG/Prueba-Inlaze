@@ -72,9 +72,9 @@ export function CreateProjectDialog({ open, onOpenChange, onProjectCreated }: Cr
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Project</DialogTitle>
+          <DialogTitle>Crear Nuevo Proyecto</DialogTitle>
           <DialogDescription>
-            Create a new project to organize your tasks and collaborate with your team.
+            Crea un nuevo proyecto para organizar tus tareas y colaborar con tu equipo.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -91,10 +91,10 @@ export function CreateProjectDialog({ open, onOpenChange, onProjectCreated }: Cr
           </div>
           <div className="flex justify-end space-x-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Project"}
+              {loading ? "Creando..." : "Crear Proyecto"}
             </Button>
           </div>
         </form>

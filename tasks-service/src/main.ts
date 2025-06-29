@@ -10,8 +10,12 @@ async function bootstrap() {
     credentials: true,
   })
 
-  // Ensure hooks are called at the top level
-  app.useGlobalPipes(new ValidationPipe())
+app.useGlobalPipes(new ValidationPipe({
+  whitelist: true,
+  forbidNonWhitelisted: true,
+  transform: true,
+  enableDebugMessages: true, 
+}));
 
   await app.listen(3003)
   console.log("Tasks Service is running on http://localhost:3003")
