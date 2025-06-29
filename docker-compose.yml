@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGODB_URI=mongodb+srv://your-username:your-password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
+      - JWT_SECRET=your-super-secret-jwt-key
+    depends_on:
+      - mongodb
+
+  # Projects Service
+  projects-service:
+    build:
+      context: ./projects-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGODB_URI=mongodb+srv://your-username:your-password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
+    depends_on:
+      - mongodb
+
+  # Tasks Service
+  tasks-service:
+    build:
+      context: ./tasks-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGODB_URI=mongodb+srv://your-username:your-password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
+    depends_on:
+      - mongodb
+
+  # Comments Service
+  comments-service:
+    build:
+      context: ./comments-service
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - MONGODB_URI=mongodb+srv://your-username:your-password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
+    depends_on:
+      - mongodb
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - AUTH_SERVICE_URL=auth-service:3001
+      - PROJECTS_SERVICE_URL=projects-service:3002
+      - TASKS_SERVICE_URL=tasks-service:3003
+      - COMMENTS_SERVICE_URL=comments-service:3004
+      - FRONTEND_URL=http://localhost:3000
+    depends_on:
+      - auth-service
+      - projects-service
+      - tasks-service
+      - comments-service
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    depends_on:
+      - api-gateway
+
+  # MongoDB (opcional si usas MongoDB Atlas)
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:

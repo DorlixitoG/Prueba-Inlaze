@@ -1,0 +1,34 @@
+# Ver: https://help.github.com/articles/ignoring-files/
+
+# 🔁 Ignorar todas las carpetas node_modules en cualquier nivel
+**/node_modules/
+
+# 🔁 Ignorar carpetas de compilación de Next.js en todos los servicios
+**/.next/
+**/out/
+
+# 🔁 Carpetas de producción
+**/build/
+**/dist/
+
+# ⚠️ Archivos de depuración
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 🔐 Archivos de entorno en cualquier subcarpeta
+**/.env
+.env*
+
+# 🔧 Archivos de configuración específicos de plataformas
+.vercel
+
+# 🟦 Archivos temporales de TypeScript
+*.tsbuildinfo
+**/*.tsbuildinfo
+next-env.d.ts
+
+# 🧪 Otros (opcional, por si usas)
+.DS_Store
+Thumbs.db
