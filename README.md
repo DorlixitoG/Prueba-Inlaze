@@ -283,3 +283,6 @@ kill -9 <PID>
 ## 📬 Contacto
 
 Para soporte o colaboración, contacta al desarrollador del proyecto.
+
+© 2025 Kevin Esneider Vasquez Bohorquez – Proyecto protegido. Reproducción prohibida sin autorización.
+
