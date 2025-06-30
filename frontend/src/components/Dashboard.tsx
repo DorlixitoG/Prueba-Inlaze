@@ -66,7 +66,8 @@ export function Dashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <NotificationSystem />
+              {/* Solo mostrar notificaciones si el usuario es admin */}
+              {user?.role === "admin" && <NotificationSystem />}
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nuevo Proyecto
