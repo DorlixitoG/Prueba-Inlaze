@@ -21,38 +21,39 @@ export function NotificationSystem() {
   useEffect(() => {
     if (user) {
       fetchNotifications()
-      // Configurar polling cada 30 segundos para nuevas notificaciones
       const interval = setInterval(fetchNotifications, 30000)
       return () => clearInterval(interval)
     }
   }, [user])
 
 
+  // frontend/src/components/NotificationSystem.tsx - método fetchNotifications
   const fetchNotifications = async () => {
     if (!token) return
 
-try {
-  const response = await fetch("http://localhost:4000/notifications", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+    try {
+      console.log("📡 Fetching notifications...")
 
-  console.log("📡 Respuesta de /notifications:", response)
+      const response = await fetch("http://localhost:4000/notifications", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
-  if (response.ok) {
-    const data = await response.json()
-    console.log("✅ Notificaciones recibidas:", data)
-    setNotifications(data)
-    setUnreadCount(data.filter((n: Notification) => !n.read).length)
-  } else {
-    const errorText = await response.text()
-    console.error("❌ Error HTTP al obtener notificaciones:", errorText)
-  }
-} catch (error) {
-  console.error("💥 Error en fetchNotifications:", error)
-}
+      console.log("📡 Respuesta de /notifications:", response.status)
 
+      if (response.ok) {
+        const data = await response.json()
+        console.log("✅ Notificaciones recibidas:", data.length)
+        setNotifications(data)
+        setUnreadCount(data.filter((n: Notification) => !n.read).length)
+      } else {
+        const errorText = await response.text()
+        console.error("❌ Error HTTP al obtener notificaciones:", errorText)
+      }
+    } catch (error) {
+      console.error("💥 Error en fetchNotifications:", error)
+    }
   }
 
   const markAsRead = async (notificationId: string) => {

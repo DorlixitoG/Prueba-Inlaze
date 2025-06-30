@@ -1,3 +1,4 @@
+// api-gateway/src/notifications/notifications.service.ts
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import axios from "axios"
 

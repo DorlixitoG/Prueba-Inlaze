@@ -1,10 +1,20 @@
-import { Controller, Get, Put, Delete, Param, Headers, UnauthorizedException } from "@nestjs/common"
+import { Controller,Post, Body,Get, Put, Delete, Param, Headers, UnauthorizedException } from "@nestjs/common"
 import { NotificationsService } from "./notifications.service"
 
 @Controller("notifications")
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
-
+@Post()
+  async createNotification(@Body() data: {
+    userId: string
+    type: string
+    title: string
+    message: string
+    taskId?: string
+    projectId?: string
+  }) {
+    return this.notificationsService.createNotification(data)
+  }
   private extractUserIdFromHeaders(headers: any): string {
     const userId = headers["x-user-id"]
     if (!userId) {

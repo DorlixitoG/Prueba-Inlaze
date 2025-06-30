@@ -100,8 +100,8 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
       resetForm()
       onOpenChange(false)
       toast({
-        title: "Success",
-        description: "Task created successfully",
+        title: "Completado",
+        description: "Tarea creada exitosamente",
       })
     } catch (error) {
       console.error("❌ Frontend - Error general:", error)
