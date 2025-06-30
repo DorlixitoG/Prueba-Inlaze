@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -29,9 +28,11 @@ export function TaskCommentsSection({ taskId }: TaskCommentsSectionProps) {
   const { toast } = useToast()
 
   useEffect(() => {
-    fetchComments()
-    fetchUsers()
-  }, [taskId])
+    if (taskId && token) {
+      fetchComments()
+      fetchUsers()
+    }
+  }, [taskId, token])
 
   const fetchUsers = async () => {
     if (!token) return
@@ -53,25 +54,36 @@ export function TaskCommentsSection({ taskId }: TaskCommentsSectionProps) {
   }
 
   const fetchComments = async () => {
-    if (!token) return
+    if (!token || !taskId) return
 
     setLoading(true)
     try {
+      console.log("🔍 Frontend - Fetching comments for task:", taskId)
       const response = await fetch(`http://localhost:4000/comments/task/${taskId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       })
 
       if (response.ok) {
         const data = await response.json()
+        console.log("✅ Frontend - Comments fetched:", data)
         setComments(data)
+      } else {
+        const errorText = await response.text()
+        console.error("❌ Frontend - Error fetching comments:", errorText)
+        toast({
+          title: "Error",
+          description: "Error al cargar los comentarios",
+          variant: "destructive",
+        })
       }
     } catch (error) {
-      console.error("Error fetching comments:", error)
+      console.error("❌ Frontend - Network error fetching comments:", error)
       toast({
         title: "Error",
-        description: "Error al cargar los comentarios",
+        description: "Error de conexión al cargar los comentarios",
         variant: "destructive",
       })
     } finally {
@@ -82,24 +94,36 @@ export function TaskCommentsSection({ taskId }: TaskCommentsSectionProps) {
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!newComment.trim() || !user) return
+    if (!newComment.trim() || !user || !taskId) {
+      console.log("❌ Frontend - Missing data:", { newComment: !!newComment.trim(), user: !!user, taskId: !!taskId })
+      return
+    }
 
     setSubmitting(true)
     try {
-      const response = await fetch("http://localhost:4000/comments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          content: newComment.trim(),
-          taskId,
-        }),
+      console.log("🔍 Frontend - Submitting comment:", {
+        content: newComment.trim(),
+        taskId,
+        user: user.name,
       })
+
+const response = await fetch("http://localhost:4000/comments", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+    "x-user-id": user?._id ?? "",
+    "x-user-name": user?.name ?? "",
+  },
+  body: JSON.stringify({
+    content: newComment.trim(),
+    taskId,
+  }),
+})
 
       if (response.ok) {
         const comment = await response.json()
+        console.log("✅ Frontend - Comment created:", comment)
         setComments([comment, ...comments])
         setNewComment("")
         toast({
@@ -108,6 +132,7 @@ export function TaskCommentsSection({ taskId }: TaskCommentsSectionProps) {
         })
       } else {
         const errorData = await response.json()
+        console.error("❌ Frontend - Error creating comment:", errorData)
         toast({
           title: "Error",
           description: errorData.message || "Error al agregar el comentario",
@@ -115,9 +140,10 @@ export function TaskCommentsSection({ taskId }: TaskCommentsSectionProps) {
         })
       }
     } catch (error) {
+      console.error("❌ Frontend - Network error creating comment:", error)
       toast({
         title: "Error",
-        description: "Error al agregar el comentario",
+        description: "Error de conexión al agregar el comentario",
         variant: "destructive",
       })
     } finally {
@@ -227,6 +253,10 @@ export function TaskCommentsSection({ taskId }: TaskCommentsSectionProps) {
         .toUpperCase()
     }
     return "U"
+  }
+
+  if (!taskId) {
+    return <div>No se pudo cargar los comentarios</div>
   }
 
   return (

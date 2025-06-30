@@ -27,24 +27,32 @@ export function NotificationSystem() {
     }
   }, [user])
 
+
   const fetchNotifications = async () => {
     if (!token) return
 
-    try {
-      const response = await fetch("http://localhost:4000/notifications", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+try {
+  const response = await fetch("http://localhost:4000/notifications", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
 
-      if (response.ok) {
-        const data = await response.json()
-        setNotifications(data)
-        setUnreadCount(data.filter((n: Notification) => !n.read).length)
-      }
-    } catch (error) {
-      console.error("Error fetching notifications:", error)
-    }
+  console.log("📡 Respuesta de /notifications:", response)
+
+  if (response.ok) {
+    const data = await response.json()
+    console.log("✅ Notificaciones recibidas:", data)
+    setNotifications(data)
+    setUnreadCount(data.filter((n: Notification) => !n.read).length)
+  } else {
+    const errorText = await response.text()
+    console.error("❌ Error HTTP al obtener notificaciones:", errorText)
+  }
+} catch (error) {
+  console.error("💥 Error en fetchNotifications:", error)
+}
+
   }
 
   const markAsRead = async (notificationId: string) => {

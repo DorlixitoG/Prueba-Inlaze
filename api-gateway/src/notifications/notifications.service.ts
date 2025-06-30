@@ -6,6 +6,8 @@ export class NotificationsService {
   private readonly notificationsServiceUrl = "http://localhost:3005"
 
   async getUserNotifications(headers: any) {
+    console.log("📤 Enviando request al microservicio con headers:", headers)
+
     try {
       const response = await axios.get(`${this.notificationsServiceUrl}/notifications`, {
         headers: {
@@ -15,8 +17,10 @@ export class NotificationsService {
           "x-user-role": headers["x-user-role"],
         },
       })
+      console.log("✅ Respuesta del microservicio:", response.data)
       return response.data
     } catch (error) {
+      console.error("💥 Error desde el microservicio:", error.response?.data || error.message)
       throw new HttpException(
         error.response?.data?.message || "Failed to get notifications",
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,

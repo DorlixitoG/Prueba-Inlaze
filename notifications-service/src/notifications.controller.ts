@@ -14,8 +14,7 @@ export class NotificationsController {
   }
 
   @Get()
-  async getUserNotifications(@Headers() headers: any) {
-    const userId = this.extractUserIdFromHeaders(headers)
+  async getUserNotifications(@Headers("x-user-id") userId: string) {
     return this.notificationsService.getUserNotifications(userId)
   }
 

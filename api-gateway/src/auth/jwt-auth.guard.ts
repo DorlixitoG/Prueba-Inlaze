@@ -1,4 +1,3 @@
-// api-gateway/src/auth/jwt-auth.guard.ts
 import { Injectable, type CanActivate, type ExecutionContext, UnauthorizedException, Inject } from "@nestjs/common"
 import { AuthService } from "./auth.service"
 
