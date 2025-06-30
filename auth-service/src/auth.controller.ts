@@ -41,4 +41,12 @@ export class AuthController {
   async getUser(@Param("id") id: string) {
     return this.authService.getUserById(id);
   }
+    @Get('users')
+async getUsers() {
+  return this.authService.getUsers()
+}
+@Get('users')
+async getAllUsers() {
+  return this.authService.getAllUsers()
+}
 }

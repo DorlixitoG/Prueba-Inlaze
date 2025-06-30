@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Plus, LogOut, FolderOpen } from "lucide-react"
 import { ProjectList } from "./ProjectList"
 import { CreateProjectDialog } from "./CreateProjectDialog"
+import { NotificationSystem } from "./NotificationSystem"
 
 interface Project {
   _id: string
@@ -65,13 +66,14 @@ export function Dashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <NotificationSystem />
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nuevo Proyecto
               </Button>
               <Button variant="outline" onClick={logout}>
                 <LogOut className="h-4 w-4 mr-2" />
-                Cerrar Sesión 
+                Cerrar Sesión
               </Button>
             </div>
           </div>

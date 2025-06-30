@@ -84,4 +84,16 @@ constructor(
     const user = await this.userModel.findById(userId).select("-password")
     return user
   }
+  async getUsers() {
+  return this.userModel.find({}, { password: 0 }).select('_id username email')
+}
+async getAllUsers() {
+  const users = await this.userModel.find().select("-password")
+  return users.map((user) => ({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  }))
+}
 }

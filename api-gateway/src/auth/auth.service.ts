@@ -58,4 +58,20 @@ async getProfile(authorization: string) {
       )
     }
   }
+  async getAllUsers(authorization: string) {
+  try {
+    const response = await axios.get(`${this.authServiceUrl}/auth/users`, {
+      headers: {
+        authorization,
+        "Content-Type": "application/json",
+      },
+    })
+    return response.data
+  } catch (error) {
+    throw new HttpException(
+      error.response?.data?.message || "Failed to get users",
+      error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+    )
+  }
+}
 }

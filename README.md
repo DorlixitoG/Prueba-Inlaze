@@ -1,4 +1,5 @@
-# 🧩 Sistema de Gestión - Arquitectura de Microservicios
+
+# 🧩 TareApp - Arquitectura de Microservicios
 
 Aplicación completa construida con una arquitectura basada en microservicios. Backend desarrollado en **NestJS**, frontend en **Next.js**, y base de datos en **MongoDB Atlas**.
 
@@ -7,13 +8,15 @@ Aplicación completa construida con una arquitectura basada en microservicios. B
 ## 🏗️ Arquitectura
 
 ### 🔧 Microservicios Backend (NestJS)
-| Servicio           | Puerto | Descripción                   |
-|--------------------|--------|-------------------------------|
-| Auth Service       | 3001   | Autenticación y autorización |
-| Projects Service   | 3002   | Gestión de proyectos         |
-| Tasks Service      | 3003   | Gestión de tareas            |
-| Comments Service   | 3004   | Comentarios en tareas        |
-| API Gateway        | 4000   | Punto único de entrada       |
+
+| Servicio             | Puerto | Descripción                    |
+|----------------------|--------|--------------------------------|
+| Auth Service         | 3001   | Autenticación y autorización   |
+| Projects Service     | 3002   | Gestión de proyectos           |
+| Tasks Service        | 3003   | Gestión de tareas              |
+| Comments Service     | 3004   | Comentarios en tareas          |
+| Notifications Service| 3005   | Notificaciones de usuario      |
+| API Gateway          | 4000   | Punto único de entrada         |
 
 ### 💻 Frontend (Next.js)
 - **Puerto 3000**  
@@ -73,12 +76,19 @@ MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/taskmanagement?r
 PORT=3004
 ```
 
+#### 📁 `notifications-service/.env`
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/taskmanagement?retryWrites=true&w=majority
+PORT=3005
+```
+
 #### 📁 `api-gateway/.env`
 ```env
 AUTH_SERVICE_URL=http://localhost:3001
 PROJECTS_SERVICE_URL=http://localhost:3002
 TASKS_SERVICE_URL=http://localhost:3003
 COMMENTS_SERVICE_URL=http://localhost:3004
+NOTIFICATIONS_SERVICE_URL=http://localhost:3005
 PORT=4000
 ```
 
@@ -105,6 +115,9 @@ cd ../tasks-service && npm install
 
 # Comments
 cd ../comments-service && npm install
+
+# Notifications
+cd ../notifications-service && npm install
 
 # API Gateway
 cd ../api-gateway && npm install
@@ -136,11 +149,15 @@ npm run start:dev
 cd ../comments-service
 npm run start:dev
 
-# Terminal 5 - API Gateway
+# Terminal 5 - Notifications
+cd ../notifications-service
+npm run start:dev
+
+# Terminal 6 - API Gateway
 cd ../api-gateway
 npm run start:dev
 
-# Terminal 6 - Frontend
+# Terminal 7 - Frontend
 cd ../frontend
 npm run dev
 ```
@@ -153,6 +170,7 @@ npm run dev
 - Projects: http://localhost:3002  
 - Tasks: http://localhost:3003  
 - Comments: http://localhost:3004  
+- Notifications: http://localhost:3005  
 - Gateway: http://localhost:4000  
 - Frontend: http://localhost:3000
 
@@ -162,7 +180,7 @@ npm run dev
 
 1. Abre `http://localhost:3000`
 2. Regístrate o inicia sesión
-3. Crea proyectos, tareas y comentarios
+3. Crea proyectos, tareas, comentarios y revisa notificaciones
 
 ---
 
@@ -173,12 +191,13 @@ Frontend (3000)
     ↓
 API Gateway (4000)
     ↓
-┌───────────────────────────────┐
-│ Auth     (3001)               │
-│ Projects (3002)               │
-│ Tasks    (3003)               │
-│ Comments (3004)               │
-└───────────────────────────────┘
+┌────────────────────────────────────────────┐
+│ Auth         (3001)                        │
+│ Projects     (3002)                        │
+│ Tasks        (3003)                        │
+│ Comments     (3004)                        │
+│ Notifications(3005)                        │
+└────────────────────────────────────────────┘
     ↓
 MongoDB Atlas
 ```
@@ -242,6 +261,7 @@ kill -9 <PID>
 
 - ✅ CRUD de proyectos y tareas
 - ✅ Sistema de comentarios por tarea
+- ✅ Notificaciones por tarea
 - ✅ Filtros de búsqueda y estado
 - ✅ Autenticación JWT con roles
 - ✅ Comunicación centralizada vía API Gateway

@@ -1,5 +1,6 @@
 export interface User {
-  id: string
+  _id: string
+  id?: string
   email: string
   name: string
   role: "admin" | "member"
@@ -8,7 +9,8 @@ export interface User {
 }
 
 export interface Project {
-  id: string
+  _id: string
+  id?: string
   name: string
   description: string
   ownerId: string
@@ -18,13 +20,14 @@ export interface Project {
 }
 
 export interface Task {
-  id: string
+  _id: string
+  id?: string
   title: string
   description: string
   status: "todo" | "in_progress" | "completed"
   priority: "low" | "medium" | "high"
   dueDate: string
-  assignedTo: string
+  assignedTo: string[] | string 
   projectId: string
   createdBy: string
   createdAt: string
@@ -32,10 +35,26 @@ export interface Task {
 }
 
 export interface Comment {
-  id: string
+  _id: string
+  id?: string
   content: string
   taskId: string
   userId: string
+  userName: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Notification {
+  _id: string
+  id?: string
+  userId: string
+  type: "comment" | "task_update" | "task_assigned"
+  title: string
+  message: string
+  taskId?: string
+  projectId?: string
+  read: boolean
   createdAt: string
   updatedAt: string
 }

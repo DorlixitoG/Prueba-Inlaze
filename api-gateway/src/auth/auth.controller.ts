@@ -1,10 +1,10 @@
-import { Controller, Post, Get, UseGuards, Body, Headers, Inject } from "@nestjs/common"
+import { Controller, Post, Get, UseGuards, Body, Headers } from "@nestjs/common"
 import { AuthService } from "./auth.service"
 import { AuthGuard } from "./auth.guard"
 
 @Controller("auth")
 export class AuthController {
-  constructor(@Inject(AuthService) private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post("register")
   async register(@Body() body: { email: string; password: string; name: string; role?: string }) {
@@ -22,5 +22,11 @@ export class AuthController {
   @Get("profile")
   async getProfile(@Headers('authorization') authorization: string) {
     return this.authService.getProfile(authorization)
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('users')
+  async getUsers(@Headers('authorization') authorization: string) {
+    return this.authService.getAllUsers(authorization)
   }
 }

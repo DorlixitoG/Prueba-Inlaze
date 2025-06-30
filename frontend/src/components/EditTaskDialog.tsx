@@ -13,14 +13,14 @@ import { useToast } from "@/hooks/use-toast"
 import { UserSelector } from "./UserSelector"
 import type { Task } from "@/types"
 
-interface CreateTaskDialogProps {
+interface EditTaskDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onTaskCreated: (task: Task) => void
-  projectId: string
+  onTaskUpdated: (task: Task) => void
+  task: Task | null
 }
 
-export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId }: CreateTaskDialogProps) {
+export function EditTaskDialog({ open, onOpenChange, onTaskUpdated, task }: EditTaskDialogProps) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [priority, setPriority] = useState("medium")
@@ -28,23 +28,33 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
   const [dueDate, setDueDate] = useState("")
   const [assignedTo, setAssignedTo] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
-  const { token, user } = useAuth()
+  const { token } = useAuth()
   const { toast } = useToast()
 
-  // Pre-seleccionar al usuario actual cuando se abre el diálogo
+  // Cargar datos de la tarea cuando se abre el diálogo
   useEffect(() => {
-    if (open && user?._id && assignedTo.length === 0) {
-      setAssignedTo([user._id])
+    if (open && task) {
+      setTitle(task.title)
+      setDescription(task.description)
+      setPriority(task.priority)
+      setStatus(task.status)
+      setDueDate(task.dueDate ? new Date(task.dueDate).toISOString().split("T")[0] : "")
+      // Manejar tanto el formato antiguo (string) como el nuevo (array)
+      if (Array.isArray(task.assignedTo)) {
+        setAssignedTo(task.assignedTo)
+      } else {
+        setAssignedTo([task.assignedTo])
+      }
     }
-  }, [open, user])
+  }, [open, task])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!user) {
+    if (!task) {
       toast({
         title: "Error",
-        description: "User not loaded. Try again shortly.",
+        description: "No hay tarea seleccionada para editar",
         variant: "destructive",
       })
       return
@@ -69,13 +79,12 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
         status,
         dueDate,
         assignedTo,
-        projectId,
       }
 
-      console.log("🔍 Frontend - Creating task with data:", taskData)
+      console.log("🔍 Frontend - Updating task with data:", taskData)
 
-      const response = await fetch("http://localhost:4000/tasks", {
-        method: "POST",
+      const response = await fetch(`http://localhost:4000/tasks/${task._id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -84,30 +93,36 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
       })
 
       const data = await response.json()
-      console.log("🔍 Frontend - Response:", data)
+      console.log("🔍 Frontend - Update response:", data)
 
       if (!response.ok) {
-        console.error("❌ Frontend - Error al crear tarea:", data)
+        console.error("❌ Frontend - Error al actualizar tarea:", data)
         toast({
           title: "Error",
-          description: Array.isArray(data.message) ? data.message.join(", ") : data.message || "Failed to create task",
+          description: Array.isArray(data.message) ? data.message.join(", ") : data.message || "Failed to update task",
           variant: "destructive",
         })
         return
       }
 
-      onTaskCreated(data)
-      resetForm()
+      // Asegurar que el task actualizado tenga el ID correcto
+      const updatedTask = {
+        ...data,
+        _id: data._id || task._id,
+        id: data._id || task._id,
+      }
+
+      onTaskUpdated(updatedTask)
       onOpenChange(false)
       toast({
-        title: "Success",
-        description: "Task created successfully",
+        title: "Éxito",
+        description: "Tarea actualizada correctamente",
       })
     } catch (error) {
       console.error("❌ Frontend - Error general:", error)
       toast({
         title: "Error",
-        description: "Something went wrong while creating the task.",
+        description: "Algo salió mal al actualizar la tarea.",
         variant: "destructive",
       })
     } finally {
@@ -124,18 +139,25 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
     setAssignedTo([])
   }
 
+  const handleClose = () => {
+    resetForm()
+    onOpenChange(false)
+  }
+
+  if (!task) return null
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Crear Nueva Tarea</DialogTitle>
-          <DialogDescription>Añade una nueva tarea a este proyecto.</DialogDescription>
+          <DialogTitle>Editar Tarea</DialogTitle>
+          <DialogDescription>Modifica la información de la tarea.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="title">Título</Label>
+            <Label htmlFor="edit-title">Título</Label>
             <Input
-              id="title"
+              id="edit-title"
               placeholder="Título de la Tarea"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -144,9 +166,9 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
           </div>
 
           <div>
-            <Label htmlFor="description">Descripción</Label>
+            <Label htmlFor="edit-description">Descripción</Label>
             <Textarea
-              id="description"
+              id="edit-description"
               placeholder="Descripción de la Tarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -156,7 +178,7 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="priority">Prioridad</Label>
+              <Label htmlFor="edit-priority">Prioridad</Label>
               <Select value={priority} onValueChange={setPriority}>
                 <SelectTrigger>
                   <SelectValue />
@@ -170,7 +192,7 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
             </div>
 
             <div>
-              <Label htmlFor="status">Estado</Label>
+              <Label htmlFor="edit-status">Estado</Label>
               <Select value={status} onValueChange={setStatus}>
                 <SelectTrigger>
                   <SelectValue />
@@ -185,12 +207,18 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
           </div>
 
           <div>
-            <Label htmlFor="dueDate">Fecha Límite</Label>
-            <Input id="dueDate" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
+            <Label htmlFor="edit-dueDate">Fecha Límite</Label>
+            <Input
+              id="edit-dueDate"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              required
+            />
           </div>
 
           <div>
-            <Label htmlFor="assignedTo">Asignar a</Label>
+            <Label htmlFor="edit-assignedTo">Asignar a</Label>
             <UserSelector
               selectedUsers={assignedTo}
               onUsersChange={setAssignedTo}
@@ -199,11 +227,11 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
           </div>
 
           <div className="flex justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+            <Button type="button" variant="outline" onClick={handleClose}>
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Task"}
+              {loading ? "Actualizando..." : "Actualizar Tarea"}
             </Button>
           </div>
         </form>

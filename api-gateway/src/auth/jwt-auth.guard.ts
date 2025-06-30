@@ -1,9 +1,10 @@
-import { Injectable, type CanActivate, type ExecutionContext, UnauthorizedException } from "@nestjs/common"
-import type { AuthService } from "./auth.service"
+// api-gateway/src/auth/jwt-auth.guard.ts
+import { Injectable, type CanActivate, type ExecutionContext, UnauthorizedException, Inject } from "@nestjs/common"
+import { AuthService } from "./auth.service"
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+  constructor(@Inject(AuthService) private authService: AuthService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest()

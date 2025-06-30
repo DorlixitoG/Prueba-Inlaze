@@ -20,8 +20,8 @@ export class Task {
   @Prop({ required: true })
   dueDate: Date
 
-  @Prop({ required: true })
-  assignedTo: string
+  @Prop({ type: [String], required: true })
+  assignedTo: string[]
 
   @Prop({ required: true })
   projectId: string

@@ -28,14 +28,14 @@ export function LoginForm() {
       console.log(" Frontend - Attempting login with:", { email, password: "***" })
       await login(email, password)
       toast({
-        title: "Success",
-        description: "Logged in successfully",
+        title: "Completado",
+        description: "Inicie sesión exitosamente",
       })
     } catch (error) {
       console.error(" Frontend - Login error:", error)
       toast({
         title: "Error",
-        description: "Invalid credentials",
+        description: "Contraseña o Correo incorrectos, intenta de nuevo",
         variant: "destructive",
       })
     } finally {

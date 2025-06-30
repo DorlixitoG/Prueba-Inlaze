@@ -15,10 +15,9 @@ export class TasksService {
   async create(createTaskDto: CreateTaskDto & { createdBy: string }) {
     console.log("🔍 Tasks Service - Create method called with:", createTaskDto)
 
-    if (!createTaskDto.assignedTo) {
-      throw new Error("assignedTo is required")
-    }
-
+if (!createTaskDto.assignedTo || createTaskDto.assignedTo.length === 0) {
+  throw new Error("At least one assignee is required")
+}
     if (!createTaskDto.projectId) {
       throw new Error("projectId is required")
     }
@@ -89,11 +88,9 @@ export class TasksService {
       throw new NotFoundException("Task not found")
     }
 
-    // Solo el creador o el asignado pueden actualizar la tarea
-    if (task.createdBy !== userId && task.assignedTo !== userId) {
-      throw new ForbiddenException("Not authorized to update this task")
-    }
-
+  if (task.createdBy !== userId && !task.assignedTo.includes(userId)) {
+   throw new ForbiddenException("Not authorized to update this task")
+  }
     return this.taskModel.findByIdAndUpdate(id, updateTaskDto, { new: true })
   }
 

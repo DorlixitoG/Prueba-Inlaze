@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsDateString } from "class-validator"
+import { IsString, IsOptional, IsEnum, IsDateString, IsArray } from "class-validator"
 
 export class CreateTaskDto {
   @IsString()
@@ -18,8 +18,10 @@ export class CreateTaskDto {
   @IsDateString()
   dueDate: string
 
-  @IsString()
-  assignedTo: string
+ @IsArray()
+  @IsString({ each: true })
+  assignedTo: string[]
+
 
   @IsString()
   projectId: string
@@ -51,6 +53,7 @@ export class UpdateTaskDto {
   dueDate?: string
 
   @IsOptional()
-  @IsString()
-  assignedTo?: string
+  @IsArray()
+  @IsString({ each: true })
+  assignedTo?: string[]
 }
