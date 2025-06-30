@@ -51,8 +51,8 @@ export function CreateProjectDialog({ open, onOpenChange, onProjectCreated }: Cr
         setName("")
         setDescription("")
         toast({
-          title: "Success",
-          description: "Project created successfully",
+          title: "Completado",
+          description: "Proyecto creado exitosamente",
         })
       } else {
         throw new Error("Failed to create project")
