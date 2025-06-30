@@ -1,0 +1,5 @@
+Durante el desarrollo, se enfrentaron múltiples desafíos técnicos al trabajar con NestJS y Next.js, tecnologías modernas, potentes y muy dinámicas, pero que también exigen un dominio profundo debido a sus constantes actualizaciones y particularidades en cuanto a compatibilidad entre versiones.
+
+Uno de los retos más significativos fue lograr que los microservicios se integraran correctamente con el API Gateway, garantizando una comunicación estable y sin errores. Esto implicó configurar con precisión los puertos, rutas y protocolos de cada servicio, manejar las dependencias entre módulos, y establecer una estructura de comunicación asincrónica eficiente.
+
+Adicionalmente, trabajar con Tailwind CSS representó un desafío particular, ya que si bien contaba con conocimientos básicos de la herramienta, mi experiencia práctica era limitada. Esto me exigió profundizar rápidamente en su sistema de clases utilitarias y adaptarme a una forma de construir interfaces más declarativa y estructurada. Con el tiempo y la práctica, fue posible implementar estilos consistentes y mantenibles, alineados con los requerimientos del proyecto.

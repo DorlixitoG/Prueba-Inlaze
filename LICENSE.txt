@@ -1,0 +1,17 @@
+LICENSE
+
+Copyright (c) 2025 Kevin Esneider Vasquez Bohorquez
+
+Todos los derechos reservados.
+
+Este software ha sido desarrollado como parte del proceso formativo en el SENA – Centro de Servicios y Gestión Empresarial, ficha 2693144.
+
+Queda prohibida cualquier reproducción, distribución, modificación o uso comercial del código fuente, total o parcial, sin la autorización expresa y por escrito del autor.
+
+Este proyecto está protegido por las leyes de propiedad intelectual. Cualquier uso no autorizado será considerado una violación de dichos derechos.
+
+Para solicitar permisos de uso, colaboración o distribución, por favor contactar a:
+
+Kevin Esneider Vasquez Bohorquez
+Correo: kevinvasquez@email.com
+Año: 2025
