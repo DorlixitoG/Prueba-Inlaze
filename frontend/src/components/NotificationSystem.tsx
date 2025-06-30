@@ -27,7 +27,6 @@ export function NotificationSystem() {
   }, [user])
 
 
-  // frontend/src/components/NotificationSystem.tsx - método fetchNotifications
   const fetchNotifications = async () => {
     if (!token) return
 

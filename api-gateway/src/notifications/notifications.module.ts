@@ -4,7 +4,7 @@ import { NotificationsService } from "./notifications.service"
 import { AuthModule } from "../auth/auth.module"
 
 @Module({
-  imports: [AuthModule], 
+  imports: [AuthModule],
   controllers: [NotificationsController],
   providers: [NotificationsService],
 })

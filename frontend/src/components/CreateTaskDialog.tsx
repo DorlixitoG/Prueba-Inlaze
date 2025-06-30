@@ -203,7 +203,7 @@ export function CreateTaskDialog({ open, onOpenChange, onTaskCreated, projectId 
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Task"}
+              {loading ? "Creando..." : "Crear Tarea"}
             </Button>
           </div>
         </form>

@@ -1,4 +1,3 @@
-// api-gateway/src/notifications/notifications.service.ts
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import axios from "axios"
 
@@ -6,16 +5,16 @@ import axios from "axios"
 export class NotificationsService {
   private readonly notificationsServiceUrl = "http://localhost:3005"
 
-  async getUserNotifications(headers: any) {
-    console.log("📤 Enviando request al microservicio con headers:", headers)
+  async getUserNotifications(user: any) {
+    console.log("📤 Enviando request al microservicio con headers:", user)
 
     try {
       const response = await axios.get(`${this.notificationsServiceUrl}/notifications`, {
         headers: {
-          "x-user-id": headers["x-user-id"],
-          "x-user-email": headers["x-user-email"],
-          "x-user-name": headers["x-user-name"],
-          "x-user-role": headers["x-user-role"],
+          'x-user-id': user._id,
+          'x-user-email': user.email,
+          'x-user-name': user.name,
+          'x-user-role': user.role,
         },
       })
       console.log("✅ Respuesta del microservicio:", response.data)
@@ -31,14 +30,18 @@ export class NotificationsService {
 
   async markAsRead(id: string, headers: any) {
     try {
-      const response = await axios.put(`${this.notificationsServiceUrl}/notifications/${id}/read`, {}, {
-        headers: {
-          "x-user-id": headers["x-user-id"],
-          "x-user-email": headers["x-user-email"],
-          "x-user-name": headers["x-user-name"],
-          "x-user-role": headers["x-user-role"],
+      const response = await axios.put(
+        `${this.notificationsServiceUrl}/notifications/${id}/read`,
+        {},
+        {
+          headers: {
+            "x-user-id": headers["x-user-id"],
+            "x-user-email": headers["x-user-email"],
+            "x-user-name": headers["x-user-name"],
+            "x-user-role": headers["x-user-role"],
+          },
         },
-      })
+      )
       return response.data
     } catch (error) {
       throw new HttpException(
@@ -50,14 +53,18 @@ export class NotificationsService {
 
   async markAllAsRead(headers: any) {
     try {
-      const response = await axios.put(`${this.notificationsServiceUrl}/notifications/mark-all-read`, {}, {
-        headers: {
-          "x-user-id": headers["x-user-id"],
-          "x-user-email": headers["x-user-email"],
-          "x-user-name": headers["x-user-name"],
-          "x-user-role": headers["x-user-role"],
+      const response = await axios.put(
+        `${this.notificationsServiceUrl}/notifications/mark-all-read`,
+        {},
+        {
+          headers: {
+            "x-user-id": headers["x-user-id"],
+            "x-user-email": headers["x-user-email"],
+            "x-user-name": headers["x-user-name"],
+            "x-user-role": headers["x-user-role"],
+          },
         },
-      })
+      )
       return response.data
     } catch (error) {
       throw new HttpException(
